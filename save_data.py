@@ -26,6 +26,13 @@ class KoikatuSaveData:
         self.b_unknown02 = file.read(17)
         # split character data
         chara_part = file.read()
+        if b'\x64\x00\x00\x00\x12\xe3\x80\x90KoiKatuChara\xe3\x80\x91' in chara_part:
+            CHARA_HEADER = b'\x64\x00\x00\x00\x12\xe3\x80\x90KoiKatuChara\xe3\x80\x91' # Old Koikatsu header from first versions in 2018
+        elif b'\x64\x00\x00\x00\x14\xe3\x80\x90KoiKatuCharaSP\xe3\x80\x91' in chara_part:
+            CHARA_HEADER = b'\x64\x00\x00\x00\x14\xe3\x80\x90KoiKatuCharaSP\xe3\x80\x91' # Koikatsu Party (2019) uses this as a header
+        else:
+            print("Could not parse savefile properly. Exiting.")
+            exit()
         chara_data = chara_part.split(CHARA_HEADER)
 
         self.characters = []
